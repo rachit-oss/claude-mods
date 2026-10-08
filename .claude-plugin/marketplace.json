@@ -1,0 +1,8 @@
+{
+  "name": "rachit-mods",
+  "owner": { "name": "Rachit Agarwal" },
+  "description": "Rachit's Claude Code mods",
+  "plugins": [
+    { "name": "context-dancer", "source": "./context-dancer" }
+  ]
+}

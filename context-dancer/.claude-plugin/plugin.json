@@ -1,0 +1,7 @@
+{
+  "name": "context-dancer",
+  "author": { "name": "Rachit Agarwal" },
+  "version": "0.1.0",
+  "description": "A Claude bot dances above the prompt once context fill passes 70%",
+  "types": "./types/index.d.ts"
+}
