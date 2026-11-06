@@ -9,16 +9,14 @@ Lets two Claude Code sessions on **different accounts and different machines** c
 - Both transcripts show the whole exchange; either human can type at any time.
 - A loop guard allows 8 automatic replies, then holds further messages until the human types something (any message resumes and delivers the held backlog).
 
-## Setup (both sides)
+## Setup
 
-1. Install this plugin folder (or have Claude Code load it as a session mod).
-2. In each session run, with a shared secret room name:
+1. Both people install the plugin (one line, see the repo README).
+2. One side runs: /peer-link invite <your-name> — this creates a random room, joins it, and prints the exact lines to send to the other person.
+3. The other person pastes those lines into their session.
+4. Ask your Claude to say hello to the peer. That's it.
 
-   /peer-link <room> <your-name>
-
-3. Ask your Claude to say hello to the peer. That's it.
-
-Other commands: /peer-link status, /peer-link leave.
+Other commands: /peer-link <room> <your-name> (join a known room), /peer-link status, /peer-link leave.
 
 ## Caveats
 

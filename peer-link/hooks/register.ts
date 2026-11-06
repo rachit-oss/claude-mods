@@ -24,6 +24,13 @@ const S: {
   tick: number
 } = { conn: null, lastId: 0, autoLeft: AUTO_BUDGET, held: [], busy: false, timer: null, lastActivity: 0, tick: 0 }
 
+const randToken = (len: number) => {
+  const bytes = new Uint8Array(len)
+  crypto.getRandomValues(bytes)
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  return Array.from(bytes, b => alphabet[b % 36]).join('')
+}
+
 const incomingPrompt = (from: string, text: string) =>
   `[peer-link] "${from}" sent a message to this session:\n\n${text}\n\n` +
   `(You are "${S.conn?.name}" in room "${S.conn?.room}". If a reply is useful, send it with the peer-link send tool, ` +
@@ -97,13 +104,28 @@ export const register: Register = on => {
     await $.command.register({
       name: 'peer-link',
       description: 'Bridge this session to a peer Claude session (another account/machine)',
-      argumentHint: '<room> <your-name> | status | leave',
+      argumentHint: 'invite [your-name] | <room> <your-name> | status | leave',
     })
     return next(e)
   })
 
   on('command.run', { command: 'peer-link' }, async ($, e) => {
     const parts = e.args.trim().split(/\s+/).filter(Boolean)
+    if (parts[0] === 'invite') {
+      const name = parts[1] ?? 'host'
+      if (!/^[A-Za-z0-9_-]{1,32}$/.test(name))
+        return { text: 'peer-link: name must be 1-32 chars of letters, digits, - or _.' }
+      const room = `room-${randToken(14)}`
+      await start($, { room, name })
+      return {
+        text:
+          `peer-link: created room "${room}" and joined as "${name}".\n\n` +
+          'Send this to your peer (they paste both lines into their Claude Code session):\n\n' +
+          '  /plugin install peer-link --marketplace NOSO-LABS/claude-mods\n' +
+          `  /peer-link ${room} <their-name>\n\n` +
+          '(They skip the install line if they already have peer-link.)',
+      }
+    }
     if (parts[0] === 'leave') {
       S.timer?.cancel()
       S.timer = null
@@ -115,10 +137,10 @@ export const register: Register = on => {
       return {
         text: S.conn
           ? `peer-link: connected to room "${S.conn.room}" as "${S.conn.name}" (1s polling when active / 4s when idle, ${S.autoLeft} auto-replies left, ${S.held.length} held, last id ${S.lastId}).`
-          : 'peer-link: not connected. Usage: /peer-link <room> <your-name>',
+          : 'peer-link: not connected. Usage: /peer-link invite [your-name], or /peer-link <room> <your-name>',
       }
     }
-    if (parts.length !== 2) return { text: 'Usage: /peer-link <room> <your-name> | status | leave' }
+    if (parts.length !== 2) return { text: 'Usage: /peer-link invite [your-name] | <room> <your-name> | status | leave' }
     const [room, name] = parts
     if (!/^[A-Za-z0-9_-]{3,64}$/.test(room) || !/^[A-Za-z0-9_-]{1,32}$/.test(name))
       return { text: 'peer-link: room and name must be 3-64 / 1-32 chars of letters, digits, - or _.' }
