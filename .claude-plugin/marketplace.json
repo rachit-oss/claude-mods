@@ -3,6 +3,7 @@
   "owner": { "name": "Rachit Agarwal" },
   "description": "Rachit's Claude Code mods",
   "plugins": [
-    { "name": "context-dancer", "source": "./context-dancer" }
+    { "name": "context-dancer", "source": "./context-dancer" },
+    { "name": "peer-link", "source": "./peer-link" }
   ]
 }

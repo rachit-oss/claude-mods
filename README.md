@@ -16,6 +16,7 @@ scope loads it in every session. Active immediately, no restart.
 | Mod | Install | What it does |
 |---|---|---|
 | [context-dancer](./context-dancer) | `/plugin install context-dancer --marketplace rachit-oss/claude-mods` | Disco party above the prompt when context fill passes 70%: dancing emojis, color-cycling equalizer, synthesized disco loop, `/dance` demo toggle |
+| [peer-link](./peer-link) | `/plugin install peer-link --marketplace NOSO-LABS/claude-mods` | Chat bridge between two Claude Code sessions on different accounts/machines: `/peer-link <room> <name>` on each side, agents message each other and wake on arrival; adaptive 1s/4s polling over the Cerebri_dev Supabase |
 
 ## Development
 

@@ -1,0 +1,7 @@
+{
+  "name": "peer-link",
+  "version": "0.1.0",
+  "description": "Chat bridge between two Claude Code sessions on different accounts/machines, over an ntfy.sh room.",
+  "author": { "name": "Rachit Agarwal" },
+  "license": "MIT"
+}
